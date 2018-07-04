@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .avatar {
+      margin: 20px;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .avatar figure {
+      width: 100px;
+      height: 100px;
+      margin: 0;
+      background-repeat: no-repeat;
+    }
+
+    .avatar p {
+      font-size: 12px;
+      text-align: center;
+      margin: 1px 0 0;
+      color: white;
+      background: green;
+    }
+
+    .chevalier {
+      background-image: url('http://avatars.mitosa.net/warcraft/016.jpg')
+    }
+
+    .knight {
+      background-image: url('http://avataru-dlya.narod.ru/avatars/s_wc/064.jpg')
+    }
+
+    .peasant {
+      background-image: url('http://avatars.mitosa.net/warcraft/039.jpg')
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    function People({ name, type, life, attack }) {
+
+      this.name = name;
+      this.type = type;
+      this.life = life;
+      this.attack = attack;
+
+      return this;
+    }
+
+    People.prototype.changeLife = function (val) { this.life = this.life + val < 0 ? 0 : this.life + val; }
+    People.prototype.createAvatar = function () {
+
+      if (!this.life) return;
+
+      let self = this;
+
+      let div = document.createElement('div');
+
+      div.className = "avatar";
+      div.title = this.name;
+      div.innerHTML = `<figure class="${this.type}"></figure><p>${this.life}</p>`;
+
+      div.onclick = function () { self.changeLife(-50); self.updateLife(this); }
+
+      document.body.appendChild(div);
+    }
+
+    People.prototype.updateLife = function (el) {
+      if (!this.life) {
+        alert('убит');
+        el.remove();
+      } else {
+        el.getElementsByTagName("p")[0].textContent = this.life;
+      }
+    }
+
+    let yourArmy = [
+      new People({ name: 'Гарик', type: 'peasant', life: 100, attack: 5 }),
+      new People({ name: 'Лева', type: 'peasant', life: 100, attack: 5 }),
+      new People({ name: 'Ланселот', type: 'knight', life: 300, attack: 10 }),
+      new People({ name: 'Артур', type: 'chevalier', life: 400, attack: 15 })
+    ];
+
+    yourArmy.forEach(el => el.createAvatar());
+
+  </script>
+</body>
+
+</html>
